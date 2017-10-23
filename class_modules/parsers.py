@@ -1,8 +1,7 @@
 import argparse
 
 class money_parser():
-
-	help = """
+	"""
 	This handles any money related commands.
 	The following commands can be passed into it.
 
@@ -31,10 +30,10 @@ class money_parser():
 
 		self.parser.add_argument("-l", "--list", help="List player's gold", action="store_true")
 		self.parser.add_argument("-n", "--note", help="Add a note to transaction", type=str, metavar="", nargs='*')
-		self.parser.add_argument("-c", "--copper-r", help="Remove coppers", type=int, metavar="")
-		self.parser.add_argument("-s", "--silver-r", help="Remove silvers", type=int, metavar="")
-		self.parser.add_argument("-g", "--gold-r", help="Remove gold", type=int, metavar="")
-		self.parser.add_argument("-p", "--platinum-r", help="Remove platinum", type=int, metavar="")
+		self.parser.add_argument("-c", "--copper_r", help="Remove coppers", type=int, metavar="")
+		self.parser.add_argument("-s", "--silver_r", help="Remove silvers", type=int, metavar="")
+		self.parser.add_argument("-g", "--gold_r", help="Remove gold", type=int, metavar="")
+		self.parser.add_argument("-p", "--platinum_r", help="Remove platinum", type=int, metavar="")
 		self.parser.add_argument("+c", "++copper", help="Add coppers", type=int, metavar="")
 		self.parser.add_argument("+s", "++silver", help="add silvers", type=int, metavar="")
 		self.parser.add_argument("+g", "++gold", help="Add gold", type=int, metavar="")
@@ -44,6 +43,15 @@ class money_parser():
 	def parse(self, arg_list):
 
 
+		# Current issues with parser that needs looking at:
+		#   - Passing in a str instead of an int will cause
+		#     a ValueError exception. Putting this in a try
+		#     except clause will catch the exception, but 
+		#     while trying to handle that exception, another
+		#     one will occur. While handling the second one,
+		#     another exception will occur and cause the 
+		#     entire program to die. 
+		#     Example problem command: .money -c p 
 		self.args = self.parser.parse_args(arg_list)
 			
 
@@ -56,6 +64,7 @@ class money_parser():
 
 		returned_info = []
 
+		# Anyone with ideas on how to shorten these if statements?
 		if self.args.copper_r:		
 			returned_info.append("Removed {} cp".format(self.args.copper_r))
 		
@@ -90,6 +99,10 @@ class money_parser():
 
 class hero_parser():
 	"""
+	Hero handler
+
+	Attribute Modifying
+
 
 	"""
 
@@ -97,12 +110,13 @@ class hero_parser():
 
 		self.parser = argparse.ArgumentParser(prefix_chars="-+")
 		self.parser.add_argument("-m", "--modify", help="Lower an attribute or remove an item")
-		self.parser.add_argument("-a", "--attr", help="Display an attribute", type=str, metavar="")
+		self.parser.add_argument("-a", "--attr", help="Display an attribute", type=str, metavar="", nargs="*")
+		self.parser.add_argument("-i", "--inv_r", help="Display inventory/remove item", type=str, metavar="", nargs="*")
+		self.parser.add_argument("+i", "++inv", help="Display inventory/add item", type=str, metavar="", nargs="*")
 
 	def parse(self, arg_list):
 
 		self.args = self.parser.parse_args(arg_list)
-		print(self.args)
 
 	def handle_args(self, hero_object):
 
@@ -112,21 +126,36 @@ class hero_parser():
 					  "wis" : "Wisdom", "cha" : "Charisma"}
 
 
-		# Note to future self:
-		# This code below needs fixin.
-		# I need a good way to get the length
-		# of a list that doesn't exist yet. 
-		# The self.args.attr needs to be
-		# checked to see how many attributes 
-		# were passed in for checking.
-		print(len(list(self.args.attr)))
-		if len(list(self.args.attr)) == 1:
-			attr = attributes[self.args.attr]
-			returned_info.append("{} :: {}".format(attr, hero_object.get_attr(attr)))
-		elif len(list(self.args.attr)) > 1:
-			for i in self.args.attr:
-				attr = attributes[i]
-				returned_info.append("{} :: {}".format(attr, hero_object.get_attr(attr)))
+		try:
+			if self.args.attr:
+				for i in self.args.attr:
+						attr = attributes[i]
+						returned_info.append("{} :: {}".format(attr, hero_object.get_attr(attr)))
 
 
-		return "\n".join(returned_info)
+			if self.args.inv_r:
+				inv_item = " ".join(self.args.inv_r)
+				if self.args.inv_r[0] == "list":
+					returned_info.append("Inventory items: {}".format(hero_object.items))
+					returned_info.append("Inventory weapons: {}".format(hero_object.weapons))
+
+				elif hero_object.mod_inv(remove_item=True, item=inv_item):
+					returned_info.append("{} removed.".format(inv_item))
+
+			if self.args.inv:
+				inv_item = " ".join(self.args.inv)
+				if self.args.inv[0] == "list":
+					returned_info.append("Inventory items: {}".format(hero_object.items))
+					returned_info.append("Inventory weapons: {}".format(hero_object.weapons))
+
+				elif hero_object.mod_inv(add_item=True, item=inv_item):
+					returned_info.append("{} added.".format(inv_item))
+
+
+			return "\n".join(returned_info)
+
+		except KeyError as e:
+			print(e)
+			return "Incorrectly formatted attribute.\nTry cha, con, dex, int, str, or wis"
+
+		

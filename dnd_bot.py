@@ -44,11 +44,11 @@ async def money(*args):
 async def hero(ctx,*args):
 	author_id = ctx.message.author.id
 	user = ctx.message.author
-	
+
 	if not author_id in characters:
 		characters[author_id] = character.hero(test_char, author_id, user)
 
-	hero_parser.parse(list(args))
+	hero_parser.parse(args)
 	return await dnd_bot.say(hero_parser.handle_args(characters[author_id]))
 
 	# return await dnd_bot.say("Strength: {}".format(characters[author_id].get_attr('Strength')))

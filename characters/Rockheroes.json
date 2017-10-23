@@ -55,5 +55,26 @@
 			"attributeCheck": "Intelligence",
 			"proficient": false
 		}
+	],
+	"inventory" : [
+		{	"money" :
+			{
+				"copper"   : 45,
+				"silver"   : 15,
+				"gold"     : 20,
+				"platinum" : 2
+			},
+			"weapons" :
+			[
+				"Battle Bagpipe",
+				"Exception(al) \"as e\" dagger"
+			],
+			"items" :
+			[
+				"\"Healing\" potion (wine)",
+				"Terrible joke book",
+				"Song book titled \"Making Noise\""
+			]
+		}
 	]
 }
