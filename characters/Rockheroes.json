@@ -1,0 +1,59 @@
+{
+	"characterName": "Catten 'RockHeroes' Idobur",
+	"playerName": "Steven",
+	"expPoints": 0,
+	"class": "Bard",
+	"level": 1,
+	"background": "Entertainer",
+	"race": "Dwarf",
+	"alignment": "Neutral",
+	"attributes": [
+		{
+			"name": "Strength",
+			"value": 11,
+			"saveProficient": false
+		},
+        {
+            "name": "Dexterity",
+            "value": 16,
+			"saveProficient": true
+        },
+		{
+            "name": "Constitution",
+            "value": 15,
+			"saveProficient": false
+        },
+		{
+            "name": "Intelligence",
+            "value": 14,
+			"saveProficient": false
+        },
+		{
+            "name": "Wisdom",
+            "value": 15,
+			"saveProficient": false
+        },
+		{
+            "name": "Charisma",
+            "value": 17,
+			"saveProficient": true
+        }
+    ],
+	"skills": [
+		{
+			"name": "Acrobatics",
+			"attributeCheck": "Dexterity",
+			"proficient": true
+		},
+		{
+			"name": "Animal Handling",
+			"attributeCheck": "Wisdom",
+			"proficient": false
+		},
+		{
+			"name": "Arcana",
+			"attributeCheck": "Intelligence",
+			"proficient": false
+		}
+	]
+}

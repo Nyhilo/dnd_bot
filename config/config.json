@@ -1,0 +1,6 @@
+{
+	"token" : "Your bot access token here",
+	"name" : "dnd bot",
+	"avatar" : "config/avatar.jpg",
+	"prefix" : "."
+}
