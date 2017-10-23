@@ -35,10 +35,16 @@ async def show_attributes(*commands):
 	return await dnd_bot.say("Check console")
 
 
-@dnd_bot.command()
-async def money(*args):
+@dnd_bot.command(pass_context=True)
+async def money(ctx, *args):
+	author_id = ctx.message.author.id
+	user = ctx.message.author
+	
+	if not author_id in characters:
+		characters[author_id] = character.hero(test_char, author_id, user)
+
 	money_parser.parse(list(args))
-	return await dnd_bot.say(money_parser.handle_transactions())
+	return await dnd_bot.say(money_parser.handle_transactions(characters[author_id]))
 
 @dnd_bot.command(pass_context=True)
 async def hero(ctx,*args):
@@ -51,8 +57,17 @@ async def hero(ctx,*args):
 	hero_parser.parse(args)
 	return await dnd_bot.say(hero_parser.handle_args(characters[author_id]))
 
-	# return await dnd_bot.say("Strength: {}".format(characters[author_id].get_attr('Strength')))
 
+@dnd_bot.command(pass_context=True)
+async def create(ctx, character_name):
+	author_id = ctx.message.author.id
 
+	path = "characters/{}".format(author_id)
+	if not os.path.exists(path):
+		os.makedirs(path)
+
+	with open ("{}/{}.json".format(path, author_id), 'w') as wf:
+		with open("characters/template.json", 'r') as rf:
+			wf.write(rf.read())
 
 dnd_bot.run(setup.bot_token)

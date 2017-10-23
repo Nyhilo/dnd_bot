@@ -7,14 +7,16 @@ class money_parser():
 
 
 	Removal commands
-	-c, --copper-r X   :: Remove X copper from player
-	-s, --silver-r X   :: Remove X Silver from plater
-	-g, --gold-r   X   :: Remove X Gold from player
-	-p, --platinum-r X :: Remove X Platinum from player
+	-c, --copper_r X   :: Remove X copper from player
+	-s, --silver_r X   :: Remove X Silver from player
+	-e, --electrum_r X :: Remove X Electrum from player
+	-g, --gold_r X     :: Remove X Gold from player
+	-p, --platinum_r X :: Remove X Platinum from player
 
 	Addition commands
 	+c, ++copper X   :: Give X copper to player
 	+s, ++silver X   :: Give X silver to player
+	+e, ++electrum X :: Give X electrum to player
 	+g, ++gold X     :: Give X gold to player
 	+p, ++platinum X :: Give X platinum to player
 
@@ -32,10 +34,12 @@ class money_parser():
 		self.parser.add_argument("-n", "--note", help="Add a note to transaction", type=str, metavar="", nargs='*')
 		self.parser.add_argument("-c", "--copper_r", help="Remove coppers", type=int, metavar="")
 		self.parser.add_argument("-s", "--silver_r", help="Remove silvers", type=int, metavar="")
+		self.parser.add_argument("-e", "--electrum_r", help="Remove electrum", type=int, metavar="")
 		self.parser.add_argument("-g", "--gold_r", help="Remove gold", type=int, metavar="")
 		self.parser.add_argument("-p", "--platinum_r", help="Remove platinum", type=int, metavar="")
 		self.parser.add_argument("+c", "++copper", help="Add coppers", type=int, metavar="")
 		self.parser.add_argument("+s", "++silver", help="add silvers", type=int, metavar="")
+		self.parser.add_argument("+e", "++electrum", help="add electrum", type=int, metavar="")
 		self.parser.add_argument("+g", "++gold", help="Add gold", type=int, metavar="")
 		self.parser.add_argument("+p", "++platinum", help="Add platinum", type=int, metavar="")
 
@@ -55,45 +59,53 @@ class money_parser():
 		self.args = self.parser.parse_args(arg_list)
 			
 
-	def handle_transactions(self):
+	def handle_transactions(self, hero_object):
 		"""
 		Simple if statements to check the arguments
 		passed in.
 		"""
 
 
-		returned_info = []
+		returned_info = ["Money for {}\n".format(hero_object.user)]
 
 		# Anyone with ideas on how to shorten these if statements?
-		if self.args.copper_r:		
-			returned_info.append("Removed {} cp".format(self.args.copper_r))
+		if self.args.copper_r:
+			returned_info.append("Copper remaining: {}".format(hero_object.mod_money(money='copper', amt=self.args.copper_r, add=False)))
 		
 		if self.args.silver_r:		
-			returned_info.append("Removed {} sp".format(self.args.silver_r))
+			returned_info.append("Silver remaining: {}".format(hero_object.mod_money(money='silver', amt=self.args.silver_r, add=False)))
+
+		if self.args.electrum_r:
+			returned_info.append("Electrum remaining: {}".format(hero_object.mod_money(money='electrum', amt=self.args.electrum_r, add=False)))
 		
 		if self.args.gold_r:
-			returned_info.append("Removed {} gp".format(self.args.gold_r))
+			returned_info.append("Gold remaining: {}".format(hero_object.mod_money(money='gold', amt=self.args.gold_r, add=False)))
 		
 		if self.args.platinum_r:
-			returned_info.append("Removed {} plat".format(self.args.platinum_r))
+			returned_info.append("Platinum remaining: {}".format(hero_object.mod_money(money='platinum', amt=self.args.platinum_r, add=False)))
 		
 		if self.args.copper:
-			returned_info.append("Added {} cp".format(self.args.copper))
+			returned_info.append("Copper remaining: {}".format(hero_object.mod_money(money='copper', amt=self.args.copper, add=True)))
 		
 		if self.args.silver:
-			returned_info.append("Added {} sp".format(self.args.silver))
-		
+			returned_info.append("Silver remaining: {}".format(hero_object.mod_money(money='silver', amt=self.args.silver, add=True)))
+
+		if self.args.electrum:
+			returned_info.append("Electrum_remaining: {}".format(hero_object.mod_money(money="electrum", amt=self.args.electrum, add=True)))
+
 		if self.args.gold:
-			returned_info.append("Added {} gp".format(self.args.gold))
+			returned_info.append("Gold remaining: {}".format(hero_object.mod_money(money='gold', amt=self.args.gold, add=True)))
 
 		if self.args.platinum:
-			returned_info.append("Added {} plat".format(self.args.platinum))
+			returned_info.append("Platinum remaining: {}".format(hero_object.mod_money(money='platinum', amt=self.args.platinum, add=True)))
 
 		if self.args.note:
+			# TODO: Save notes with character. 
+			#       Maybe a separate 'transaction log'?
 			returned_info.append("Transaction note: {}".format(" ".join(self.args.note)))
 
 		if self.args.list:
-			returned_info.append("You have \u221e monies")
+			returned_info.append(hero_object.get_gold())
 
 		return "\n".join(returned_info)
 
@@ -101,31 +113,44 @@ class hero_parser():
 	"""
 	Hero handler
 
-	Attribute Modifying
+	Removal Commands
 
+	-i, --inv_r X	:: remove item. "list" will show all items. 
+	-w, --wep_r X	:: remove weapon. "list" will show all weapons.
+
+	Addition commands
+
+	+i, ++inv X		:: Add item. "list" will show all items.
+	+w, ++wep X		:: Add weapon. "list" will show all weapons.
 
 	"""
 
 	def __init__(self):
 
 		self.parser = argparse.ArgumentParser(prefix_chars="-+")
-		self.parser.add_argument("-m", "--modify", help="Lower an attribute or remove an item")
 		self.parser.add_argument("-a", "--attr", help="Display an attribute", type=str, metavar="", nargs="*")
 		self.parser.add_argument("-i", "--inv_r", help="Display inventory/remove item", type=str, metavar="", nargs="*")
 		self.parser.add_argument("+i", "++inv", help="Display inventory/add item", type=str, metavar="", nargs="*")
+		self.parser.add_argument("-w", "--wep_r", help="Display weapons/remove weapon", type=str, metavar="", nargs="*")
+		self.parser.add_argument("+w", "++wep", help="Display weapons/add weapon", type=str, metavar="", nargs="*")
 
 	def parse(self, arg_list):
 
+		# This suffers from the same problem as the
+		# parser money_parser.parse().
+		# Also needs fixin.
 		self.args = self.parser.parse_args(arg_list)
 
 	def handle_args(self, hero_object):
 
-		returned_info = []
+		returned_info = ["Info for {}:\n".format(hero_object.user)]
 		attributes = {"str" : "Strength", "dex" : "Dexterity",
 					  "con" : "Constitution", "int" : "Intelligence",
 					  "wis" : "Wisdom", "cha" : "Charisma"}
 
 
+
+		# This below needs condensing.
 		try:
 			if self.args.attr:
 				for i in self.args.attr:
@@ -137,20 +162,31 @@ class hero_parser():
 				inv_item = " ".join(self.args.inv_r)
 				if self.args.inv_r[0] == "list":
 					returned_info.append("Inventory items: {}".format(hero_object.items))
-					returned_info.append("Inventory weapons: {}".format(hero_object.weapons))
 
-				elif hero_object.mod_inv(remove_item=True, item=inv_item):
-					returned_info.append("{} removed.".format(inv_item))
+				else:	
+					returned_info.append(hero_object.mod_inv(remove_item=True, item=inv_item))
 
 			if self.args.inv:
 				inv_item = " ".join(self.args.inv)
 				if self.args.inv[0] == "list":
 					returned_info.append("Inventory items: {}".format(hero_object.items))
-					returned_info.append("Inventory weapons: {}".format(hero_object.weapons))
 
-				elif hero_object.mod_inv(add_item=True, item=inv_item):
-					returned_info.append("{} added.".format(inv_item))
+				else:
+					returned_info.append(hero_object.mod_inv(add_item=True, item=inv_item))
 
+			if self.args.wep_r:
+				weapon = " ".join(self.args.wep_r)
+				if self.args.wep_r[0] == "list":
+					returned_info.append("Weapons: {}".format(hero_object.weapons))
+				else:
+					returned_info.append(hero_object.mod_inv(remove_item=True, item=weapon, inventory='w'))
+
+			if self.args.wep:
+				weapon = " ".join(self.args.wep)
+				if self.args.wep[0] == "list":
+					returned_info.append("Weapons: {}".format(hero_object.weapons))
+				else:
+					returned_info.append(hero_object.mod_inv(add_item=True, item=weapon, inventory='w'))
 
 			return "\n".join(returned_info)
 

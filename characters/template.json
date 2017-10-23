@@ -1,0 +1,154 @@
+{
+	"characterName": "name",
+	"playerName": "player",
+	"expPoints": 0,
+	"class": "class",
+	"level": 1,
+	"background": "background",
+	"race": "race",
+	"alignment": "alignment",
+	"attributes": [
+		{
+			"name": "Strength",
+			"value": 0,
+			"saveProficient": false
+		},
+        {
+            "name": "Dexterity",
+            "value": 0,
+			"saveProficient": false
+        },
+		{
+            "name": "Constitution",
+            "value": 0,
+			"saveProficient": false
+        },
+		{
+            "name": "Intelligence",
+            "value": 0,
+			"saveProficient": false
+        },
+		{
+            "name": "Wisdom",
+            "value": 0,
+			"saveProficient": false
+        },
+		{
+            "name": "Charisma",
+            "value": 0,
+			"saveProficient": false
+        }
+    ],
+	"skills": [
+		{
+			"name": "Acrobatics",
+			"attributeCheck": "Dexterity",
+			"proficient": false
+		},
+		{
+			"name": "Animal Handling",
+			"attributeCheck": "Wisdom",
+			"proficient": false
+		},
+		{
+			"name": "Arcana",
+			"attributeCheck": "Intelligence",
+			"proficient": false
+		},
+		{
+			"name" : "Athletics",
+			"attributeCheck" : "Strength",
+			"proficient" : false
+		},
+		{
+			"name" : "Deception",
+			"attributeCheck" : "Charisma",
+			"proficient" : false
+		},
+		{
+			"name" : "History",
+			"attributeCheck" : "Intelligence",
+			"proficient" : false 
+		},
+		{
+			"name" : "Insight",
+			"attributeCheck" : "Wisdom",
+			"proficient" : false
+		},
+		{
+			"name" : "Intimidation",
+			"attributeCheck" : "Charisma",
+			"proficient" : false
+		},
+		{
+			"name" : "Investigation",
+			"attributeCheck" : "Intelligence",
+			"proficient" : false
+		},
+		{
+			"name" : "Medicine",
+			"attributeCheck" : "Medicine",
+			"proficient" : false
+		},
+		{
+			"name" : "Nature",
+			"attributeCheck" : "Intelligence",
+			"proficient" : false
+		},
+		{
+			"name" : "Perception",
+			"attributeCheck" : "Wisdom",
+			"proficient" : false
+		},
+		{
+			"name" : "Performance",
+			"attributeCheck" : "Wisdom",
+			"proficient" : false
+		},
+		{
+			"name" : "Persuasion",
+			"attributeCheck" : "Charisma",
+			"proficient" : false
+		},
+		{
+			"name" : "Religion",
+			"attributeCheck" : "Intelligence",
+			"proficient" : false	
+		},
+		{
+			"name" : "Sleight of Hand",
+			"attributeCheck" : "Dexterity",
+			"proficient" : false
+		},
+		{
+			"name" : "Stealth",
+			"attributecheck" : "Dexterity",
+			"proficient" : false
+		},
+		{
+			"name" : "Survival",
+			"attributeCheck" : "Wisdom",
+			"proficient" : false
+		}
+
+	],
+	"inventory" : [
+		{	"money" :
+			{
+				"copper"   : 0,
+				"silver"   : 0,
+				"electrum" : 0,
+				"gold"     : 0,
+				"platinum" : 0
+			},
+			"weapons" :
+			[
+				"weapons"
+			],
+			"items" :
+			[
+				"items"
+			]
+		}
+	]
+}

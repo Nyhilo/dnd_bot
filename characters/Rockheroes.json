@@ -61,19 +61,21 @@
 			{
 				"copper"   : 45,
 				"silver"   : 15,
+				"electrum" : 44,
 				"gold"     : 20,
 				"platinum" : 2
 			},
 			"weapons" :
 			[
 				"Battle Bagpipe",
-				"Exception(al) \"as e\" dagger"
+				"Exception(al) [as e] dagger",
+				"Rapier"
 			],
 			"items" :
 			[
-				"\"Healing\" potion (wine)",
+				"Healing potion (wine)",
 				"Terrible joke book",
-				"Song book titled \"Making Noise\""
+				"Song book: Making Noise"
 			]
 		}
 	]

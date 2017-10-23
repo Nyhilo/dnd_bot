@@ -41,32 +41,61 @@ class hero():
 			if attrs['name'] == attribute:
 				return(attrs["value"])
 
-	def mod_inv(self, remove_item=False, add_item=False, item=None):
-		"""
-		If remove_item is True, then the
-		item is removed with whether the
-		removal was successful.
+	def get_gold(self):
+		copper = self.gold['copper']
+		silver = self.gold['silver']
+		elec = self.gold['electrum']
+		gold = self.gold['gold']
+		plat = self.gold['platinum']
 
-		If add_item is True, the item
-		is added in with whether the 
-		addition was successful.
-
-		If item is None, it'll return
-		the inventory without the gold.
-		"""
-
-		if item is None:
-			return True
-		if remove_item:
-			# Testing purposes, True for now
-			return True
-		if add_item:
-			# Testing_purposes, True for now
-			return True
+		return "copper: {}\nSilver: {}\nElectrum: {}\nGold: {}\nPlatinum: {}".format(copper,silver,elec,gold,plat)
 
 
 	def get_uid(self):
 		return self.user_id
+
+
+	def mod_inv(self, remove_item=False, add_item=False, item=None, inventory='i'):
+		"""
+		If remove_item is True, then the
+		item is removed if it exists in
+		the inventory.
+
+		If add_item is True, the item
+		is added in.
+
+		If item is None, it returns
+		with a string stating no item
+		was provided.
+		"""
+
+		if inventory   == 'i': inventory = self.items
+		elif inventory == 'w': inventory = self.weapons
+
+		if item is None:
+			return "No item provided."
+		if remove_item:
+			if item in inventory:
+				return "{} removed.".format(item)
+			else:
+				return "No such item: {}".format(item)
+		if add_item:
+			inventory.append(item)
+			return "{} added.".format(item)		
+
+
+	def mod_money(self, money="copper", amt=0, add=True):
+		"""
+		Add or remove money
+		"""
+		# TODO: Add in change calculations.
+		if add:
+			self.gold[money] += amt
+		else:
+			self.gold[money] -= amt
+
+		return self.gold[money]
+
 
 	def write_hero(self):
 		"""
